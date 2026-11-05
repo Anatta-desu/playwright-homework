@@ -1,0 +1,64 @@
+
+name: Manual Test Run
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Получаем код из репозитория
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Устанавливаем Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+
+      # 3. Устанавливаем зависимости проекта
+      - name: Install dependencies
+        run: npm install
+
+      # 4. Устанавливаем браузеры Playwright
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      # 5. Запускаем UI-тесты
+      - name: Run UI tests
+        run: npm run tests:ui -- --reporter=html
+        env:
+          PLAYWRIGHT_HTML_OUTPUT_DIR: playwright-report-ui
+          PLAYWRIGHT_HTML_OPEN: never
+
+      # 6. Запускаем API-тесты даже при ошибках UI
+      - name: Run API tests
+        if: ${{ !cancelled() }}
+        run: npm run tests:api -- --reporter=html
+        env:
+          PLAYWRIGHT_HTML_OUTPUT_DIR: playwright-report-api
+          PLAYWRIGHT_HTML_OPEN: never
+
+      # 7. Сохраняем UI-отчёт
+      - name: Upload UI test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-ui
+          path: playwright-report-ui/
+          retention-days: 7
+
+      # 8. Сохраняем API-отчёт
+      - name: Upload API test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-api
+          path: playwright-report-api/
+          retention-days: 7

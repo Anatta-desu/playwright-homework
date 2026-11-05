@@ -8,7 +8,7 @@ const CheckoutStepOnePage = require('../pages/CheckoutStepOnePage');
 const CheckoutStepTwoPage = require('../pages/CheckoutStepTwoPage');
 const CheckoutCompletePage = require('../pages/CheckoutCompletePage');
 
-test('User can purchase the most expensive product', async ({ page }) => {
+test('User can purchase the most expensive product @ui', async ({ page }) => {
     // 1. Initialize Page Objects
     const loginPage = new LoginPage(page);
     const inventoryPage = new InventoryPage(page);

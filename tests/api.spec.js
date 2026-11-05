@@ -56,7 +56,7 @@ async function getToken(request) {
   return body.token;
 }
 
-test.describe('API tests for Restful Booker', () => {
+test.describe('API tests for Restful Booker @api', () => {
   test('Create booking', async ({ request }) => {
     const response = await request.post(`${baseURL}/booking`, {
       data: bookingData

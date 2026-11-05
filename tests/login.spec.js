@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-test.describe('Авторизация на Sauce Demo', () => {
+test.describe('Авторизация на Sauce Demo @ui', () => {
 	test('Пользователь должен успешно войти в систему', async ({ page }) => {
 		await page.goto('https://www.saucedemo.com/');
 		await page.locator('#user-name').fill('standard_user');
